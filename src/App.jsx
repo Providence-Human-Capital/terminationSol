@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import NavigationBar from "./components/NavigationBar";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomeInit from "./HomeInit";
+import PrintOutPage from "./views/printout/PrintOutPage";
 
 function App() {
   return (
@@ -19,7 +20,10 @@ const WrapperComponent = () => {
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<HomeInit />}></Route>
+        <Route exact path="/" element={<Navigate to={"/print/out"} />} />
+        <Route exact path="/" element={<HomeInit />}>
+          <Route exact path="/print/out" element={<PrintOutPage />} />
+        </Route>
       </Routes>
     </>
   );

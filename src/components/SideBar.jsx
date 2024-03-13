@@ -47,14 +47,14 @@ const SideBar = () => {
             <div className="multinav-scroll" style={styles.pageHeight}>
               <ul className="sidebar-menu" data-widget="tree">
                 <li id="aside-bar">
-                  <NavLink to={"/dashboard"}>
+                  <NavLink to={"/print/out"}>
                     <i
-                      className="ti-pie-chart"
+                      className="ti-unlock"
                       style={{
                         fontSize: "20px",
                       }}
                     ></i>
-                    <span>Dashboard</span>
+                    <span>Print Forms</span>
                   </NavLink>
                 </li>
               </ul>
