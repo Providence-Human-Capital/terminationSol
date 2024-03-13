@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from "react";
+import React, { forwardRef, useRef, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Papa from "papaparse";
@@ -125,11 +125,7 @@ const PrintTerminationForm = () => {
           display: "none",
         }}
       >
-        <TerminationFormPrint
-          ref={terminationRef}
-          company={company}
-          clients={clients}
-        />
+        <TerminationFormPrint ref={terminationRef} />
       </div>
       <div className="row">
         <Formik
@@ -140,11 +136,41 @@ const PrintTerminationForm = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-            {({ }) => (
-                <Form>
-                    
-                </Form>
-            )}
+          {({}) => (
+            <Form>
+              <div className="card p-4 mt-5">
+                <div className="row g-3">
+                  <div className="col-12 mb-4">
+                    <h2
+                      style={{
+                        textTransform: "uppercase",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Printing Termination Certificate{" "}
+                    </h2>
+                    <span className="text-muted">
+                      Please make sure that you upload the csv files containing
+                      all the names and don't forget the company and any
+                      neccessary information as per template
+                    </span>
+                    <h4>
+                      {" "}
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                        }}
+                      >
+                        NB:
+                      </span>{" "}
+                      Please make sure the file that you are uploading is a CSV
+                      file{" "}
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </Form>
+          )}
         </Formik>
       </div>
     </>
