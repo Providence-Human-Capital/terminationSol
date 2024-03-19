@@ -54,7 +54,18 @@ const SideBar = () => {
                         fontSize: "20px",
                       }}
                     ></i>
-                    <span>Print Forms</span>
+                    <span>Print Forms (Bulk)</span>
+                  </NavLink>
+                </li>
+                <li id="aside-bar">
+                  <NavLink to={"/print/single/print"}>
+                    <i
+                      className="ti-file"
+                      style={{
+                        fontSize: "20px",
+                      }}
+                    ></i>
+                    <span>Print Form (Single)</span>
                   </NavLink>
                 </li>
               </ul>

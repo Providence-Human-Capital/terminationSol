@@ -4,6 +4,10 @@ import * as Yup from "yup";
 import Papa from "papaparse";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import Swal from "sweetalert2";
+import TerminationDocumentPrint from "../../prints/TerminationDocumentPrint";
+import { useDispatch, useSelector } from "react-redux";
+import { printActions } from "../../../store/prints";
+import { Link } from "react-router-dom";
 
 const TerminationFormPrint = forwardRef(({ company, clients }, ref) => {
   return (
@@ -19,10 +23,14 @@ const TerminationFormPrint = forwardRef(({ company, clients }, ref) => {
             key={index}
             style={{
               height: "1025px",
-              marginTop: index >= 1 ? "6rem" : "0",
+              marginTop: index >= 1 ? "4rem" : "4rem",
             }}
           >
-            <h1>Termination Form</h1>
+            <TerminationDocumentPrint
+              company={company}
+              client={client}
+              index={index}
+            />
           </div>
         ))}
     </div>
@@ -59,8 +67,13 @@ const PrintTerminationForm = () => {
   const [csvData, setCsvData] = useState([]);
   const [columnArray, setColumnArray] = useState([]);
 
+  const clients = useSelector((state) => state.print.currentTF);
+  const dispatch = useDispatch();
+
   const validationSchema = Yup.object().shape({
-    company: Yup.string().required("Please  Enter The Company Name"),
+    company: Yup.string().required(
+      "Please  Select Form Type (Innscor/ Simbisa / Umbrella)"
+    ),
     fileInput: Yup.mixed().required(
       "Select The CSV File With All The Employee Information"
     ),
@@ -68,6 +81,7 @@ const PrintTerminationForm = () => {
 
   const handleSubmit = (values, { setSubmitting }) => {
     setIsPrinting(true);
+    dispatch(printActions.clearOnLoad());
     setExamData(values);
     Papa.parse(values.fileInput, {
       header: true,
@@ -83,39 +97,65 @@ const PrintTerminationForm = () => {
 
         const convertedData = namesData.map((dataItem) => {
           return {
-            date_of_termination: dataItem[0],
-            first_name: dataItem[1],
-            surname: dataItem[2],
-            company: dataItem[3],
+            employee_no: dataItem[0],
+            surname: dataItem[1],
+            first_name: dataItem[2],
+            date_joined_fund: dataItem[3],
+            termination_date: dataItem[4],
+            date_of_birth: dataItem[5],
+            address: dataItem[6],
+            email: dataItem[8],
+            national_id: dataItem[9],
+            bank_name:  dataItem[10],
+            branch_code: dataItem[11],
+            account_number: dataItem[12],
+            employer: dataItem[13],
+            sex: dataItem[14],
+            pension_ref: dataItem[15],
+            mobile: dataItem[16],
+            marital_status: dataItem[17],
+            leaving_reason: dataItem[18],
           };
         });
         setColumnArray(columnData[0]);
         setCsvData(convertedData);
+        dispatch(
+          printActions.setCurrentPrintTerminationForms({
+            currentTF: convertedData,
+          })
+        );
         console.log(convertedData);
       },
     });
   };
-  const PrintTerminationForms = () => {
-    Swal.fire({
-      icon: "warning",
-      title: "Confirmation",
-      text: `Are you sure you are ready to print all ${csvData.length} termination forms}`,
-      showCancelButton: true,
-      confirmButtonText: "Yes",
-      cancelButtonText: "No",
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        handlePrintTerminationPrint();
-      } else {
-      }
-    });
+  const handlePrintTerminationPrint = () => {
+    console.log("Termination Ref:", terminationRef.current); // Check if terminationRef is correctly set
+    if (terminationRef.current) {
+      Swal.fire({
+        icon: "warning",
+        title: "Confirmation",
+        text: `Are you sure you are ready to print all ${csvData.length} termination forms`,
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Trigger printing only if the ref is valid
+          handlePrintTerminationPrintF();
+        } else {
+          // Handle cancel logic if needed
+        }
+      });
+    } else {
+      console.error("Termination Ref is not set or is null.");
+    }
   };
 
   const terminationRef = useRef();
-  const handlePrintTerminationPrint = useReactToPrint({
-    content: terminationRef.current,
+  const handlePrintTerminationPrintF = useReactToPrint({
+    content: () => terminationRef.current,
   });
 
   return (
@@ -126,7 +166,11 @@ const PrintTerminationForm = () => {
           display: "none",
         }}
       >
-        <TerminationFormPrint ref={terminationRef} />
+        <TerminationFormPrint
+          ref={terminationRef}
+          company={examData}
+          clients={csvData}
+        />
       </div>
       <div className="row">
         <Formik
@@ -172,12 +216,38 @@ const PrintTerminationForm = () => {
                     <div className="col-lg-4 col-md-12">
                       <div className="form-floating">
                         <Field
-                          type="text"
-                          className="form-control"
+                          as="select"
+                          className="form-select"
                           id="company"
                           name="company"
-                        />
-                        <label htmlFor="company">COMPANY</label>
+                        >
+                          <option value=""></option>
+                          <option
+                            value="SIMBISA"
+                            style={{
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            SIMBISA
+                          </option>
+                          <option
+                            value="UMBRELLA"
+                            style={{
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            UMBRELLA
+                          </option>
+                          <option
+                            value="INNSCOR"
+                            style={{
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            INNSCOR
+                          </option>
+                        </Field>
+                        <label htmlFor="company">FORM TYPE</label>
                         <ErrorMessage
                           name="company"
                           component="div"
@@ -188,6 +258,7 @@ const PrintTerminationForm = () => {
                         />
                       </div>
                     </div>
+
                     <div className="col-lg-6 col-md-12">
                       <div className="form-floating">
                         <input
@@ -246,7 +317,7 @@ const PrintTerminationForm = () => {
                     <div>
                       <button
                         className="btn btn-primary text-uppercase"
-                        onClick={PrintTerminationForms}
+                        onClick={handlePrintTerminationPrint}
                         disabled={csvData.length <= 0}
                         style={{
                           borderRadius: "10px",
@@ -262,6 +333,8 @@ const PrintTerminationForm = () => {
             </Form>
           )}
         </Formik>
+
+        <div className="row"></div>
         <div className="box">
           <div className="box-header no-border">
             <h4
@@ -283,23 +356,41 @@ const PrintTerminationForm = () => {
                       <th className="bb-2">DATE OF TERMINATION</th>
                       <th className="bb-2">FIRST NAME</th>
                       <th className="bb-2">SURNAME</th>
+                      <th className="bb-2">PHONE NUMBER</th>
                       <th className="bb-2">COMPANY</th>
+                      <th className="bb-2">PENSION REF NO.</th>
+                      <th className="bb-2">LEAVING REASON</th>
                       <th className="bb-2">ACTIONS</th>
                     </tr>
                   </thead>
                   <tbody>
                     {/* date_of_termination */}
-                    {csvData &&
-                      csvData.map((client, index) => (
+                    {clients &&
+                      clients.map((client, index) => (
                         <tr key={index}>
-                          <td>{client.date_of_termination}</td>
+                          <td>{client.termination_date}</td>
                           <td>{client.first_name}</td>
                           <td>{client.surname}</td>
-                          <td>{client.company}</td>
+                          <td>{client.mobile}</td>
+                          <td>{client.employer}</td>
+                          <td>{client.pension_ref}</td>
                           <td>
-                            <button className="btn btn-primary" style={{
-                                borderRadius: "10px"
-                            }}>BCF PRINT</button>
+                            <span className="badge badge-primary">
+                              {client.leaving_reason}
+                            </span>
+                          </td>
+
+                          <td>
+                            <Link to={`/print/beneficiary/document/${index}`}>
+                              <button
+                                className="btn btn-primary"
+                                style={{
+                                  borderRadius: "10px",
+                                }}
+                              >
+                                BCF PRINT
+                              </button>
+                            </Link>
                           </td>
                         </tr>
                       ))}

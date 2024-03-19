@@ -30,10 +30,10 @@ const NavigationBar = () => {
             <div className="logo-lg">
               <span className="light-logo">
                 <img
-                  src="/public/assets/images/PROVIDENCE HEALTH LOGO.png"
+                  src="/public/assets/images/MINERVABC.png"
                   alt="logo"
                   style={{
-                    height: "7rem",
+                    height: "5rem",
                   }}
                 />
               </span>
@@ -161,10 +161,10 @@ const NavigationBar = () => {
                           color: "black",
                         }}
                       >
-                        Tafadzwa Gashira
+                        MINERVA RESK ADVISORS
                       </p>
                       <small className="fs-10 mb-0 text-uppercase text-mute">
-                        Admin
+                        PRINTING
                       </small>
                     </div>
                     <img

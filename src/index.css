@@ -17,10 +17,11 @@
     --white-color: #ffffff;
     --sidebar-color: #ffffff;
   
-    --primary-color: #2794eb;
+    --primary-color: #E21A21;
     --secondary-color: #00AC9A;
   }
-  
+
+
   .form-control, .form-select {
     border-color: var(--border-color);
     color: var(--color-900);

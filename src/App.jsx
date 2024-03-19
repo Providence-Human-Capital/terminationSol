@@ -3,6 +3,8 @@ import NavigationBar from "./components/NavigationBar";
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomeInit from "./HomeInit";
 import PrintOutPage from "./views/printout/PrintOutPage";
+import PrintBeneficiaryForm from "./views/printout/components/PrintBeneficiaryForm";
+import SingleFormPrint from "./views/prints/SingleFormPrint";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ const WrapperComponent = () => {
         <Route exact path="/" element={<Navigate to={"/print/out"} />} />
         <Route exact path="/" element={<HomeInit />}>
           <Route exact path="/print/out" element={<PrintOutPage />} />
+          <Route exact path="/print/single/print" element={<SingleFormPrint />} />
+          <Route exact path="/print/beneficiary/document/:clientId" element={<PrintBeneficiaryForm />} />
         </Route>
       </Routes>
     </>
