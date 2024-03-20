@@ -22,8 +22,7 @@ const TerminationFormPrint = forwardRef(({ company, clients }, ref) => {
           <div
             key={index}
             style={{
-              height: "1025px",
-              marginTop: index >= 1 ? "4rem" : "4rem",
+              marginTop: index >= 1 ? "0" : "4rem",
             }}
           >
             <TerminationDocumentPrint
@@ -31,30 +30,6 @@ const TerminationFormPrint = forwardRef(({ company, clients }, ref) => {
               client={client}
               index={index}
             />
-          </div>
-        ))}
-    </div>
-  );
-});
-
-const BeneficiaryFormPrint = forwardRef(({ company, clients }, ref) => {
-  return (
-    <div
-      ref={ref}
-      style={{
-        margin: "0",
-      }}
-    >
-      {clients &&
-        clients.map((client, index) => (
-          <div
-            key={index}
-            style={{
-              height: "1025px",
-              marginTop: index >= 1 ? "6rem" : "0",
-            }}
-          >
-            <h1>Beneficiary Form</h1>
           </div>
         ))}
     </div>
@@ -104,17 +79,19 @@ const PrintTerminationForm = () => {
             termination_date: dataItem[4],
             date_of_birth: dataItem[5],
             address: dataItem[6],
-            email: dataItem[8],
-            national_id: dataItem[9],
-            bank_name:  dataItem[10],
-            branch_code: dataItem[11],
-            account_number: dataItem[12],
-            employer: dataItem[13],
-            sex: dataItem[14],
-            pension_ref: dataItem[15],
-            mobile: dataItem[16],
-            marital_status: dataItem[17],
-            leaving_reason: dataItem[18],
+            address1: dataItem[7],
+            address2: dataItem[8],
+            email: dataItem[9],
+            national_id: dataItem[10],
+            bank_name: dataItem[11],
+            branch_code: dataItem[12],
+            account_number: dataItem[13],
+            employer: dataItem[14],
+            sex: dataItem[15],
+            pension_ref: dataItem[16],
+            mobile: dataItem[17],
+            marital_status: dataItem[18],
+            leaving_reason: dataItem[19],
           };
         });
         setColumnArray(columnData[0]);

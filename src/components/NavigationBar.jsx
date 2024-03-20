@@ -30,7 +30,7 @@ const NavigationBar = () => {
             <div className="logo-lg">
               <span className="light-logo">
                 <img
-                  src="/public/assets/images/MINERVABC.png"
+                  src="/public/assets/images/PHC_Logo.png"
                   alt="logo"
                   style={{
                     height: "5rem",
